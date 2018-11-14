@@ -8,30 +8,35 @@
   {{> header }}
   <div class="page-content tab">
     <h2>Trading Ticket</h2>
+    <br>
     <div id="tradeInput">
-        <input class="hidden" id="accountNumber" name="accountNumber" value={{data.accountNumber}}></input>
-        <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet" name="orderSymbol" style="width: 15vw"></input>
-        <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet" name="orderQuantity" type="number" style="width: 15vw"></input>
-        <p class="title"><h4>Order Action: </h4></p>
-        <select name="orderAction" class="form-control">
-            <option value="buy">buy</option>
-            <option value="sell">sell</option>
-        </select>
-        <p class="title"><h4>Order Price Type: </h4></p>
-        <select id="priceType" name="orderPriceType" class="form-control">
-            <option value="market">market</option>
-            <option value="limit">limit</option>
-        </select>
+        <div id="trading-ticket-input" class="form-group">
+            <input class="hidden" id="accountNumber" name="accountNumber" value={{data.accountNumber}}></input>
+            <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet" name="orderSymbol" style="width: 15vw"></input>
+            <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet" name="orderQuantity" type="number" style="width: 15vw"></input>
+            <p class="title"><h4>Order Action: </h4></p>
+            <select name="orderAction" class="form-control">
+                <option value="buy">buy</option>
+                <option value="sell">sell</option>
+            </select>
+            <p class="title"><h4>Order Price Type: </h4></p>
+            <select id="priceType" name="orderPriceType" class="form-control">
+                <option value="market">market</option>
+                <option value="limit">limit</option>
+            </select>
 
-        <p class="title hidden limit">Order Limit Price: </p>
-        <input id="orderLimitPrice" class="hidden limit" name="orderLimitPrice" type="number"></input>
+            <p class="title hidden limit">Order Limit Price: </p>
+            <input id="orderLimitPrice" class="hidden limit" name="orderLimitPrice" type="number"></input>
 
-        <p class="title"><h4>Order Expiration: </h4></p>
-        <select name="orderExpiration" class="form-control">
-            <option value="day">day</option>
-            <option value="gtc">gtc</option>
-        </select>
-        <br />
+            <p class="title"><h4>Order Expiration: </h4></p>
+            <select name="orderExpiration" class="form-control">
+                <option value="day">day</option>
+                <option value="gtc">gtc</option>
+            </select>
+            <br>
+        </div>
+        <br>
+        <button id="addMore" class="btn btn-primary">Add More</button>
         <button id="reviewOrder" class="btn btn-warning">Review Order</button>
     </div>
 
