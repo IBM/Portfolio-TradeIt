@@ -37,6 +37,8 @@ li {
 }
 
 .trading-ticket-form {
+    display: inline-block;
+    margin-right: 10px;
     width: fit-content;
     padding: 10px;
     border: 2px solid #000000;
