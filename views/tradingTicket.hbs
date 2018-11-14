@@ -10,34 +10,36 @@
     <h2>Trading Ticket</h2>
     <br>
     <div id="tradeInput">
-        <div id="trading-ticket-input" class="form-group">
-            <input class="hidden" id="accountNumber" name="accountNumber" value={{data.accountNumber}}></input>
-            <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet" name="orderSymbol" style="width: 15vw"></input>
-            <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet" name="orderQuantity" type="number" style="width: 15vw"></input>
+      <div id="trading-tickets">
+        <div id="trading-ticket-input1" class="form-group trading-ticket-form">
+            <input class="hidden" id="accountNumber1" name="accountNumber" value={{data.accountNumber}}></input>
+            <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet1" name="orderSymbol" style="width: 15vw"></input>
+            <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet1" name="orderQuantity" type="number" style="width: 15vw"></input>
             <p class="title"><h4>Order Action: </h4></p>
-            <select name="orderAction" class="form-control">
+            <select name="orderAction1" class="form-control">
                 <option value="buy">buy</option>
                 <option value="sell">sell</option>
             </select>
             <p class="title"><h4>Order Price Type: </h4></p>
-            <select id="priceType" name="orderPriceType" class="form-control">
+            <select id="priceType1" name="orderPriceType1" class="form-control">
                 <option value="market">market</option>
                 <option value="limit">limit</option>
             </select>
 
             <p class="title hidden limit">Order Limit Price: </p>
-            <input id="orderLimitPrice" class="hidden limit" name="orderLimitPrice" type="number"></input>
+            <input id="orderLimitPrice1" class="hidden limit" name="orderLimitPrice" type="number"></input>
 
             <p class="title"><h4>Order Expiration: </h4></p>
-            <select name="orderExpiration" class="form-control">
+            <select name="orderExpiration1" class="form-control">
                 <option value="day">day</option>
                 <option value="gtc">gtc</option>
             </select>
             <br>
         </div>
-        <br>
-        <button id="addMore" class="btn btn-primary">Add More</button>
-        <button id="reviewOrder" class="btn btn-warning">Review Order</button>
+      </div>
+      <br>
+      <button id="addMore" class="btn btn-primary">Add More</button>
+      <button id="reviewOrder" class="btn btn-warning">Review Order</button>
     </div>
 
     <div class="hidden" id="reviewScreen">
@@ -91,7 +93,7 @@
             getPreviewOrder();
         });
 
-        $('#priceType').on('change', function() {
+        $('#priceType1').on('change', function() {
             if ($(this).val() == 'limit') {
                 $('.limit').removeClass('hidden');
             }
@@ -112,14 +114,14 @@
     var getPreviewOrder = function(){
         var postData = {};
         postData.token = "{{data.sessionToken}}";
-        postData.orderSymbol = $('#orderSymbolSet').val();
-        postData.accountNumber = $('#accountNumber').val();
-        postData.orderQuantity = $('#orderQuantitySet').val();
-        postData.orderAction = $('select[name=orderAction]').val();
-        postData.orderPriceType = $('select[name=orderPriceType]').val();
-        postData.orderExpiration = $('select[name=orderExpiration]').val();
+        postData.orderSymbol = $('#orderSymbolSet1').val();
+        postData.accountNumber = $('#accountNumber1').val();
+        postData.orderQuantity = $('#orderQuantitySet1').val();
+        postData.orderAction = $('select[name=orderAction1]').val();
+        postData.orderPriceType = $('select[name=orderPriceType1]').val();
+        postData.orderExpiration = $('select[name=orderExpiration1]').val();
         if(postData.orderPriceType == "limit"){
-            postData.orderLimitPrice = $('#orderLimitPrice').val();
+            postData.orderLimitPrice = $('#orderLimitPrice1').val();
         }
 
         $.ajax({
@@ -209,5 +211,24 @@
         $('#backToPortfolio').append("<input class='hidden' name='sessionToken' value=" + "{{data.sessionToken}}" + "></input>");
     };
 
+    var next = 1;
+		$("#addMore").click(function(e){
+        e.preventDefault();
+        var addto = "#trading-ticket-input"+next;
+        next = next + 1;
+        var newIn = '<div id="trading-ticket-input'+next+'" class="form-group trading-ticket-form"> <input class="hidden" id="accountNumber'+next+'" name="accountNumber" value={{data.accountNumber}}></input> <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet'+next+'" name="orderSymbol" style="width: 15vw"></input> <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet'+next+'" name="orderQuantity" type="number" style="width: 15vw"></input> <p class="title"><h4>Order Action: </h4></p> <select name="orderAction'+next+'" class="form-control"> <option value="buy">buy</option> <option value="sell">sell</option> </select> <p class="title"><h4>Order Price Type: </h4></p> <select id="priceType'+next+'" name="orderPriceType'+next+'" class="form-control"> <option value="market">market</option> <option value="limit">limit</option> </select> <p class="title hidden limit">Order Limit Price: </p> <input id="orderLimitPrice'+next+'" class="hidden limit" name="orderLimitPrice" type="number"></input> <p class="title"><h4>Order Expiration: </h4></p> <select name="orderExpiration'+next+'" class="form-control"> <option value="day">day</option> <option value="gtc">gtc</option> </select> <br> </div>'
+        var newInput = $(newIn);
+        $(addto).after(newInput);
+        
+        $('#priceType'+next).on('change', function() {
+            if ($(this).val() == 'limit') {
+                $('.limit').removeClass('hidden');
+            }
+            else if($(this).val() == 'market') {
+                $('.limit').addClass('hidden');
+            }
+        });
+    });
+ 
 
 </script>
