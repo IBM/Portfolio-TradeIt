@@ -204,7 +204,9 @@
           $('#placeOrder').addClass("disabled");
           for (var i = 0; i < dataArray.length; i+=1) {
             var data = dataArray[i];
-            placeOrder(data.token, data.orderId)
+            setTimeout(function() {
+              placeOrder(data.token, data.orderId);
+            }, i*5000);
           }
       });
     };
@@ -228,9 +230,10 @@
         orderSuccessCount += 1;
         console.log(orderDataArray);
       } else if(data.status == 'ERROR') {
-        $('#shortMessage').val(data.shortMessage);
-        $('#longMessage').val(data.longMessages[0]);
-        $('#sendErrorMgs').click();
+        console.log(data);
+//        $('#shortMessage').val(data.shortMessage);
+//        $('#longMessage').val(data.longMessages[0]);
+//        $('#sendErrorMgs').click();
       }
 
       if (orderSuccessCount == next) {
