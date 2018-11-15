@@ -64,9 +64,13 @@
     </div>
 
     <div class="hidden" id="confirmationScreen">
-      <span class="text-primary" style="font-size: large;">Confirmation Screen:</span><br><br>
-      <span style="font-size: large;" id="confirmationMessage"></span><br><br>
-      <span style="font-size: large;" id="orderNumber"></span><br><br>
+      <span class="text-primary" style="font-size: large;">Confirmation Screen:</span>
+      <br><br>
+      <div id="confirmation-block-1" class="confirmation-blocks">
+        <span style="font-size: large;" id="confirmationMessage1"></span><br><br>
+        <span style="font-size: large;" id="orderNumber1"></span>
+      </div>
+      <br><br>
     </div>
 
     <form action="/authError" method="post" id="sessionExpired" class="hidden">
@@ -155,6 +159,7 @@
     };
 
     var parseResult = function(dataArray){
+      console.log(dataArray);
       for (var j = 0; j < dataArray.length; j+=1) {
         if (j == 0) continue;
         
@@ -165,7 +170,6 @@
         $(addto).after(newInput); 
       }
       
-      console.log(dataArray);
       $('#reviewScreen').removeClass('hidden');
       $('#tradeInput').addClass('hidden');
       for (var i = 0; i < dataArray.length; i+=1) {
@@ -198,7 +202,10 @@
 
       $('#placeOrder').on('click', function(){
           $('#placeOrder').addClass("disabled");
-          placeOrder(data.token, data.orderId)
+          for (var i = 0; i < dataArray.length; i+=1) {
+            var data = dataArray[i];
+            placeOrder(data.token, data.orderId)
+          }
       });
     };
 
@@ -208,25 +215,53 @@
             dataType: "jsonp",
             method: "POST",
             url: "https://ems.qa.tradingticket.com/api/v1/order/placeStockOrEtfOrder",
-            success: orderPlaced
+            success: incrementSuccessOrdersPlaced
         });
     };
 
-    var orderPlaced = function(data){
-        if(data.status == 'SUCCESS'){
-            $('#reviewScreen').addClass('hidden');
-            $('#confirmationScreen').removeClass('hidden');
+    var orderSuccessCount = 0;
+    var orderDataArray = [];
+    var incrementSuccessOrdersPlaced = function(data) {
+      console.log('Ash');
+      if(data.status == 'SUCCESS') {
+        orderDataArray.push(data);
+        orderSuccessCount += 1;
+        console.log(orderDataArray);
+      } else if(data.status == 'ERROR') {
+        $('#shortMessage').val(data.shortMessage);
+        $('#longMessage').val(data.longMessages[0]);
+        $('#sendErrorMgs').click();
+      }
 
-            $('#confirmationMessage').text(data.confirmationMessage);
-            $('#orderNumber').text("orderNumber: " + data.orderNumber);
-            $('#backToTT').removeClass('hidden');
-            $('#backToPortfolio').removeClass('hidden');
+      if (orderSuccessCount == next) {
+        orderPlaced(orderDataArray);
+      }
+    };
+
+    var orderPlaced = function(orderDataArray){
+      for (var j = 0; j < orderDataArray.length; j+=1) {
+        if (j == 0) continue;
+        
+        var addto = "#confirmation-block-"+j;
+        var num = j+1;
+        var newIn = '<div id="confirmation-block-'+num+'" class="confirmation-blocks"> <span style="font-size: large;" id="confirmationMessage'+num+'"></span><br><br> <span style="font-size: large;" id="orderNumber'+num+'"></span> </div>';
+        var newInput = $(newIn);
+        $(addto).after(newInput); 
+      }
+
+      $('#reviewScreen').addClass('hidden');
+      $('#confirmationScreen').removeClass('hidden');
+      $('#backToTT').removeClass('hidden');
+      $('#backToPortfolio').removeClass('hidden');
+      
+      for (var i = 0; i < orderDataArray.length; i+=1) {
+        var data = orderDataArray[i];
+        var num = i+1;
+        if(data.status == 'SUCCESS'){
+            $('#confirmationMessage'+num).text(data.confirmationMessage);
+            $('#orderNumber'+num).text("orderNumber: " + data.orderNumber);
         }
-        if(data.status == 'ERROR'){
-            $('#shortMessage').val(data.shortMessage);
-            $('#longMessage').val(data.longMessages[0]);
-            $('#sendErrorMgs').click();
-        }
+      }
     }
 
     var backToTradingTicket = function(){
