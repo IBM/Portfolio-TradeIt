@@ -36,9 +36,10 @@ li {
     font-size: large;
 }
 
-.trading-ticket-form {
+.trading-ticket-form, .review-blocks {
     display: inline-block;
     margin-right: 10px;
+    margin-bottom: 10px;
     width: fit-content;
     padding: 10px;
     border: 2px solid #000000;
