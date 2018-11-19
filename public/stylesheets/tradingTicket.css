@@ -34,27 +34,10 @@ li {
 #reviewScreen {
     font-size: large;
 }
-<<<<<<< HEAD
-
-.trading-ticket-form {
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    width: fit-content;
-    padding: 10px;
-    border: 2px solid #000000;
-}
-
-=======
->>>>>>> rob-branch-1
 .confirmation-blocks, .review-blocks {
     margin-right: 10px;
     margin-bottom: 10px;
     width: fit-content;
     padding: 10px;
     border: 2px solid #000000;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> rob-branch-1
