@@ -1,0 +1,153 @@
+body{
+  font-family: Helvetica;
+}
+
+#calendar-title{
+  display: block;
+  position: relative;
+  width: 70%;
+  margin-left: 15%;
+  text-align: center;
+  border-bottom: thin solid black;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+#gantt-title{
+  display: block;
+  position: relative;
+  width: 70%;
+  text-align: center;
+  border-bottom: thin solid black;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+
+#calendar-wrapper{
+  position: relative;
+  display: block;
+  height: 250px;
+  width:100%;
+  margin-left: 0%;
+}
+
+#graph-picklist-wrapper{
+  text-align: center;
+}
+
+#calendar-click-info{
+  position: absolute;
+  display: inline-block;
+  width: 66%;
+  text-align: center;
+  font-size: 18px;
+  bottom: 30px;
+}
+
+#calendar-legend{
+  position: absolute;
+  display: inline-block;
+  min-width:200px;
+  text-align: center;
+  font-size: 15px;
+  left:73%;
+  bottom: 30px;
+}
+
+.month-path{
+  fill: none;
+  stroke: black;
+  stroke-width: 5px;
+}
+
+.day {
+  stroke: black;
+  stroke-width:1px;
+}
+
+.month-label{
+  stroke:white;
+}
+
+.legend-box{
+  position: relative;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin: 5px 5px -4px 5px;
+}
+
+#legend-box-white{
+  background-color: #b5cde1;
+  border:thin solid black;
+}
+#legend-box-light{
+  background-color: #588EBB;
+  border:thin solid black;
+}
+#legend-box-dark{
+  background-color: #386890;
+  border:thin solid black;
+}
+
+html,body,#wrapper {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+}
+
+.chart {
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+}
+
+.axis path,.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.buy {
+	fill: #0C35AA;
+}
+
+.sell {
+	fill: #4F2794;
+}
+
+.buy:hover, .sell:hover {
+  fill: #CADFFE;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.legend {
+    padding: 5px;
+    font: 16px sans-serif;
+    background: yellow;
+    box-shadow: 2px 2px 1px #888;
+}
+
+.tooltip {
+    background: #eee;
+    box-shadow: 0 0 5px #999999;
+    color: #333;
+    font-size: 12px;
+    left: 130px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    top: 95px;
+    z-index: 10;
+    display: block;
+    opacity: 0;
+}
+
+

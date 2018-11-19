@@ -31,10 +31,13 @@ li {
     margin-top: 20px;
 }
 
-#reviewOrder {
-    margin-top: 20px;
-}
-
 #reviewScreen {
     font-size: large;
+}
+.confirmation-blocks, .review-blocks {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+    padding: 10px;
+    border: 2px solid #000000;
 }

@@ -3,61 +3,73 @@
 <head>
     {{> prereqs }}
     <link rel='stylesheet' href='/stylesheets/tradingTicket.css'/>
+    <link rel="stylesheet" href="/stylesheets/calendar.css"/>
 </head>
 <body class="sandboxtwo">
   {{> header }}
   <div class="page-content tab">
-    <h2>Trading Ticket</h2>
-    <div id="tradeInput">
-        <input class="hidden" id="accountNumber" name="accountNumber" value={{data.accountNumber}}></input>
-        <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet" name="orderSymbol" style="width: 15vw"></input>
-        <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet" name="orderQuantity" type="number" style="width: 15vw"></input>
-        <p class="title"><h4>Order Action: </h4></p>
-        <select name="orderAction" class="form-control">
-            <option value="buy">buy</option>
-            <option value="sell">sell</option>
-        </select>
-        <p class="title"><h4>Order Price Type: </h4></p>
-        <select id="priceType" name="orderPriceType" class="form-control">
-            <option value="market">market</option>
-            <option value="limit">limit</option>
-        </select>
-
-        <p class="title hidden limit">Order Limit Price: </p>
-        <input id="orderLimitPrice" class="hidden limit" name="orderLimitPrice" type="number"></input>
-
-        <p class="title"><h4>Order Expiration: </h4></p>
-        <select name="orderExpiration" class="form-control">
-            <option value="day">day</option>
-            <option value="gtc">gtc</option>
-        </select>
-        <br />
-        <button id="reviewOrder" class="btn btn-warning">Review Order</button>
+    <h2>Trading Tickets</h2>
+    <br>
+        <div id="tradeInput">
+            <div id="trading-tickets">
+                <table style="width:100%">
+                <tr>
+                    <th><h3>Ticker</h3></th>
+                    <th><h3>Quantity</h3></th> 
+                    <th><h3>Order Action</h3></th>
+                    <th><h3>Order Price Type</h3></th>
+                    <th><h3>Limit Price</h3></th>
+                    <th><h3>Order Expiration</h3></th>
+                    <th></th>
+                </tr>
+                <tbody id="trading-ticket-input1" class="form-group trading-ticket-form">
+                <tr>
+                    <input class="hidden" id="accountNumber1" name="accountNumber" value={{data.accountNumber}}></input>
+                    <td><input class="form-control" id="orderSymbolSet1" name="orderSymbol" style="width: 8vw"></input></td>
+                    <td><input class="form-control" id="orderQuantitySet1" name="orderQuantity" type="number" style="width: 8vw"></input></td> 
+                    <td>           
+                        <select name="orderAction1" class="form-control" style="width: 8vw">
+                            <option value="buy">buy</option>
+                            <option value="sell">sell</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="priceType1" name="orderPriceType1" class="form-control" data-trading-ticket-num="1" style="width: 12vw">
+                            <option value="market">market</option>
+                            <option value="limit">limit</option>
+                        </select>
+                    </td>
+                    <td><input id="orderLimitPrice1" class="hidden form-control limit1" name="orderLimitPrice" type="number" style="width: 8vw"></input></td>
+                    <td>
+                        <select name="orderExpiration1" class="form-control" style="width: 8vw; align: right">
+                            <option value="day">day</option>
+                            <option value="gtc">gtc</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button id="addMore" class="btn btn-primary">Add More</button>
+            <button id="reviewOrder" class="btn btn-warning">Review Order</button>
+            </div>
     </div>
 
     <div class="hidden" id="reviewScreen">
         <span class="text-info">Review Screen:</span><br><br>
-        <span id="orderSymbol"></span><br>
-        <span id="orderAction"></span><br>
-        <span id="orderQuantity"></span><br>
-        <span id="orderExpiration"></span><br>
-        <span id="orderPrice"></span><br>
-        <span id="orderValueLabel"></span><br>
-        <span id="orderMessage"></span><br>
-        <span id="timestamp"></span><br>
-        <span id="buyingPower"></span><br>
-        <span id="availableCash"></span><br>
-        <span id="estimatedOrderCommission"></span>
-        <br><br>
+        <div id="review-blocks">
+        </div>
+        <br>
+    </div><div id="review-buttons" class="hidden">
         <button class="btn btn-danger" id="cancel">Cancel</button>
         <button class="btn btn-success" id="placeOrder">Place Order</button>
-
     </div>
 
     <div class="hidden" id="confirmationScreen">
-      <span class="text-primary" style="font-size: large;">Confirmation Screen:</span><br><br>
-      <span style="font-size: large;" id="confirmationMessage"></span><br><br>
-      <span style="font-size: large;" id="orderNumber"></span><br><br>
+      <span class="text-primary" style="font-size: large;">Confirmation Screen:</span>
+      <br><br>
+      <div id="confirmation-blocks">
+      </div>
+      <br><br>
     </div>
 
     <form action="/authError" method="post" id="sessionExpired" class="hidden">
@@ -73,136 +85,273 @@
     <form action="/portfolio" method="post" id="backToPortfolio" class="hidden" style="display: none;">
         <button class="buttons" id="goToPortfolio">View Portfolio</button>
     </form>
+      <br>
+    <h2 >Choose a Portfolio to add these trades to:</h2><br>
+    <select id="portfolioSelect" name="portfolioSelect" class="form-control" style="width: 25vw; align: center" onChange="calendarFromHoldings();">
+        <option value="loading">Select your portfolio...</option>
+    </select>
   </div>
+  <div id="calendar" class="page-content tab" ></div>
+    <br>
+    <div id="calendar-title" class="hidden" align="center">Trades Placed This Year</div>
+      <div id="calendar-wrapper" align="center" class='hidden'></div>
+    </div>
+    <div id="gantt" align="center"></div>
+    </div>
   {{> footer }}
 </body>
 
 </html>
 <script src="/javascripts/jquery-2.2.0.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://static.mentful.com/gantt-chart-d3v2.js"></script>
+<script src="/javascripts/calendar.js"></script>
 <script>
-
+    `
+            var postData = {};
+            postData.token = "{{data.sessionToken}}";
+            postData.accountNumber = $('#accountNumber1').val();
+            alert(JSON.stringify(postData))
+            $.ajax({
+                data: postData,
+                dataType: "jsonp",
+                method: "POST",
+                url: "https://ems.qa.tradingticket.com/api/v2/position/getPositions",
+                success: test
+            });
+    `
     $(function(){
         $('#reviewOrder').on('click', function(){
-            getPreviewOrder();
+           getPreviewOrder();
         });
-
-        $('#priceType').on('change', function() {
+        $('#priceType1').on('change', function() {
             if ($(this).val() == 'limit') {
-                $('.limit').removeClass('hidden');
+              $('.limit1').removeClass('hidden');
             }
             else if($(this).val() == 'market') {
-                $('.limit').addClass('hidden');
+              $('.limit1').addClass('hidden');
             }
         });
-
         $('#backToTT').on('click', function(){
             backToTradingTicket();
         });
-
         $('#goToPortfolio').on('click', function(){
             toPortfolio();
         });
     });
 
     var getPreviewOrder = function(){
-        var postData = {};
-        postData.token = "{{data.sessionToken}}";
-        postData.orderSymbol = $('#orderSymbolSet').val();
-        postData.accountNumber = $('#accountNumber').val();
-        postData.orderQuantity = $('#orderQuantitySet').val();
-        postData.orderAction = $('select[name=orderAction]').val();
-        postData.orderPriceType = $('select[name=orderPriceType]').val();
-        postData.orderExpiration = $('select[name=orderExpiration]').val();
-        if(postData.orderPriceType == "limit"){
-            postData.orderLimitPrice = $('#orderLimitPrice').val();
+      //figure out total # of trades:
+      totalTrades = 0
+      for (var j=1; j<=next; j+=1) {
+ 
+          if($('#orderSymbolSet'+j).length > 0 && $('#orderSymbolSet'+j).val().length > 0 && $('#orderQuantitySet'+j).val().length > 0){
+              totalTrades += 1
+          }
+      }
+      for (var i=1; i<=next; i+=1) {
+        if(i==1){
+            //reset successReviews if resubmitting...
+            successReviewCount = 0
+            dataArray=[]
         }
+        var postData = {};
+        //if trade ticket has been removed, or has ticker/quantity empty
+        if($('#orderSymbolSet'+i).length > 0 && $('#orderSymbolSet'+i).val().length > 0 && $('#orderQuantitySet'+i).val().length > 0){
+            postData.token = "{{data.sessionToken}}";
+            postData.orderSymbol = $('#orderSymbolSet'+i).val();
+            postData.accountNumber = "{{data.accountNumber}}";
+            postData.orderQuantity = $('#orderQuantitySet'+i).val();
+            postData.orderAction = $('select[name=orderAction'+i+']').val();
+            postData.orderPriceType = $('select[name=orderPriceType'+i+']').val();
+            postData.orderExpiration = $('select[name=orderExpiration'+i+']').val();
+            if(postData.orderPriceType == "limit"){
+                postData.orderLimitPrice = $('#orderLimitPrice'+i).val();
+            }
+            $.ajax({
+                data: postData,
+                dataType: "jsonp",
+                method: "POST",
+                url: "https://ems.qa.tradingticket.com/api/v1/order/previewStockOrEtfOrder",
+                success: incrementSuccessReviews
+            });
+        }
+      }
+    };
+    
+    var successReviewCount = 0;
+    var dataArray = [];
 
-        $.ajax({
-            data: postData,
-            dataType: "jsonp",
-            method: "POST",
-            url: "https://ems.qa.tradingticket.com/api/v1/order/previewStockOrEtfOrder",
-            success: parseResult
-        });
-
+    var incrementSuccessReviews = function(data) {
+      if(data.status == "REVIEW_ORDER") {
+        successReviewCount += 1;
+        dataArray.push(data);
+      } else if(data.status == "ERROR"){
+        $('#shortMessage').val(data.shortMessage);
+        $('#longMessage').val(data.longMessages[0]);
+        $('#sendErrorMgs').click();
+      }
+      if (successReviewCount == totalTrades) {
+        parseResult(dataArray);
+      }
     };
 
-    var parseResult = function(data){
+    var parseResult = function(dataArray){
+      for (var j = 0; j < dataArray.length; j+=1) {
+        //if (j == 0) continue;
+        var addto = "#review-block-"+j;
+        var num = j+1;
+        var newIn = '<div id="review-block-'+num+'" class="review-blocks"> <span id="orderSymbol'+num+'"></span><br> <span id="orderAction'+num+'"></span><br> <span id="orderQuantity'+num+'"></span><br> <span id="orderExpiration'+num+'"></span><br> <span id="orderPrice'+num+'"></span><br> <span id="orderValueLabel'+num+'"></span><br> <span id="orderMessage'+num+'"></span><br> <span id="timestamp'+num+'"></span><br> <span id="buyingPower'+num+'"></span><br> <span id="availableCash'+num+'"></span><br> <span id="estimatedOrderCommission'+num+'"></span> </div>';
+        //var newInput = $(newIn);
+        $('#review-blocks').append(newIn); 
+      } 
+
+      $('#reviewScreen').removeClass('hidden');
+      $('#review-buttons').removeClass('hidden');
+      $('#tradeInput').addClass('hidden');
+      for (var i = 0; i < dataArray.length; i+=1) {
+        var data = dataArray[i];
+        var num = i+1;
         if(data.status == "REVIEW_ORDER"){
-            $('#reviewScreen').removeClass('hidden');
-            $('#tradeInput').addClass('hidden');
             if(data.orderDetails){
-                $('#orderSymbol').text("Order Symbol: " + data.orderDetails.orderSymbol);
-                $('#orderAction').text("Order Action: " + data.orderDetails.orderAction);
-                $('#orderQuantity').text("Order Quantity: " + data.orderDetails.orderQuantity);
-                $('#orderExpiration').text("Order Expiration: " + data.orderDetails.orderExpiration);
-                $('#orderPrice').text("Order Price: " + data.orderDetails.orderPrice);
-                $('#orderValueLabel').text("Order Value Label: " + data.orderDetails.orderValueLabel);
-                $('#orderMessage').text("Order Message: " + data.orderDetails.orderMessage);
-                $('#timestamp').text("Timestamp: " + data.orderDetails.timestamp);
-                $('#buyingPower').text("Buying Power: " + data.orderDetails.buyingPower);
-                $('#availableCash').text("Available Cash: " + data.orderDetails.availableCash);
-                $('#estimatedOrderCommission').text("Estimated Order Commission: " + data.orderDetails.estimatedOrderCommission);
-
-
-                $('#cancel').on('click', function(){
-                    $('#tradeInput').removeClass('hidden');
-                    $('#reviewScreen').addClass('hidden');
-                });
-
-                $('#placeOrder').on('click', function(){
-                    $('#placeOrder').addClass("disabled");
-                    placeOrder(data.token, data.orderId)
-                });
+                $('#orderSymbol'+num).text("Order Symbol: " + data.orderDetails.orderSymbol);
+                $('#orderAction'+num).text("Order Action: " + data.orderDetails.orderAction);
+                $('#orderQuantity'+num).text("Order Quantity: " + data.orderDetails.orderQuantity);
+                $('#orderExpiration'+num).text("Order Expiration: " + data.orderDetails.orderExpiration);
+                $('#orderPrice'+num).text("Order Price: " + data.orderDetails.orderPrice);
+                $('#orderValueLabel'+num).text("Order Value Label: " + data.orderDetails.orderValueLabel);
+                $('#orderMessage'+num).text("Order Message: " + data.orderDetails.orderMessage);
+                $('#timestamp'+num).text("Timestamp: " + data.orderDetails.timestamp);
+                $('#buyingPower'+num).text("Buying Power: " + data.orderDetails.buyingPower);
+                $('#availableCash'+num).text("Available Cash: " + data.orderDetails.availableCash);
+                $('#estimatedOrderCommission'+num).text("Estimated Order Commission: " + data.orderDetails.estimatedOrderCommission);
             }
             if(data.warningsList[0]){
-                $('#reviewScreen').append("<p>warningMessage: " + data.warningsList[0] + "</p>");
+                $('#review-block-'+num).append("<p>warningMessage: " + data.warningsList[0] + "</p>");
             }
         }
-        if(data.status == "ERROR"){
-            $('#shortMessage').val(data.shortMessage);
-            $('#longMessage').val(data.longMessages[0]);
-            $('#sendErrorMgs').click();
-
-        }
+      }
+      $('#cancel').on('click', function(){
+        $('#tradeInput').removeClass('hidden');
+        $('#review-blocks').empty()
+        $('#review-buttons').addClass('hidden')
+        $('#reviewScreen').addClass('hidden');
+      });
+      $('#placeOrder').on('click', function(){
+          $('#placeOrder').addClass("disabled");
+          for (var i = 0; i < dataArray.length; i+=1) {
+            var data = dataArray[i];
+            setTimeout(function() {
+              placeOrder(data.token, data.orderId);
+            }, i*5000);
+          }
+      });
     };
-
     var placeOrder = function(sessionToken, orderId){
         $.ajax({
             data: {orderId: orderId, token: sessionToken},
             dataType: "jsonp",
             method: "POST",
             url: "https://ems.qa.tradingticket.com/api/v1/order/placeStockOrEtfOrder",
-            success: orderPlaced
+            success: incrementSuccessOrdersPlaced
         });
     };
-
-    var orderPlaced = function(data){
+    var orderSuccessCount = 0;
+    var orderDataArray = [];
+    var incrementSuccessOrdersPlaced = function(data) {
+        alert(JSON.stringify(data))
+      if(data.status == 'SUCCESS') {
+        orderDataArray.push(data);
+        orderSuccessCount += 1;
+      } else if(data.status == 'ERROR') {
+//        $('#shortMessage').val(data.shortMessage);
+//        $('#longMessage').val(data.longMessages[0]);
+//        $('#sendErrorMgs').click();
+      }
+      if (orderSuccessCount == totalTrades) {
+        orderPlaced(orderDataArray);
+      }
+    };
+    var orderPlaced = function(orderDataArray){
+      $('#confirmation-blocks').empty()
+      //alert(JSON.stringify(orderDataArray))
+      for (var j = 0; j < orderDataArray.length; j+=1) {
+        //if (j == 0) continue;
+        var addto = "#confirmation-block-"+j;
+        var num = j+1;
+        var newIn = '<div id="confirmation-block-'+num+'" class="confirmation-blocks"> <span style="font-size: large;" id="confirmationMessage'+num+'"></span><br><br> <span style="font-size: large;" id="orderNumber'+num+'"></span> </div>';
+       // var newInput = $(newIn);
+       $('#confirmation-blocks').append(newIn); 
+      }
+      $('#reviewScreen').addClass('hidden');
+      $('#confirmationScreen').removeClass('hidden');
+      $('#review-buttons').addClass('hidden')
+      $('#backToTT').removeClass('hidden');
+      $('#backToPortfolio').removeClass('hidden');
+      
+      for (var i = 0; i < orderDataArray.length; i+=1) {
+        var data = orderDataArray[i];
+        var num = i+1;
         if(data.status == 'SUCCESS'){
-            $('#reviewScreen').addClass('hidden');
-            $('#confirmationScreen').removeClass('hidden');
-
-            $('#confirmationMessage').text(data.confirmationMessage);
-            $('#orderNumber').text("orderNumber: " + data.orderNumber);
-            $('#backToTT').removeClass('hidden');
-            $('#backToPortfolio').removeClass('hidden');
+            $('#confirmationMessage'+num).text(data.confirmationMessage);
+            $('#orderNumber'+num).text("orderNumber: " + data.orderNumber);
         }
-        if(data.status == 'ERROR'){
-            $('#shortMessage').val(data.shortMessage);
-            $('#longMessage').val(data.longMessages[0]);
-            $('#sendErrorMgs').click();
-        }
+      }
     }
-
     var backToTradingTicket = function(){
         $('#backToTT').append("<input class='hidden' name='accountNumber' value=" + "{{data.accountNumber}}" + "></input>");
         $('#backToTT').append("<input class='hidden' name='sessionToken' value=" + "{{data.sessionToken}}" + "></input>");
     };
-
     var toPortfolio = function(){
         $('#backToPortfolio').append("<input class='hidden' name='account' value=" + "{{data.accountNumber}}" + "></input>");
         $('#backToPortfolio').append("<input class='hidden' name='sessionToken' value=" + "{{data.sessionToken}}" + "></input>");
     };
-
-
+    var next = 1;
+		$("#addMore").click(function(e){
+        e.preventDefault();
+        var addto = "#trading-ticket-input"+next;
+        next = next + 1;
+      //var newIn = '<div id="trading-ticket-input'+next+'" class="form-group trading-ticket-form"> <input class="hidden" id="accountNumber'+next+'" name="accountNumber" value={{data.accountNumber}}></input> <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet'+next+'" name="orderSymbol" style="width: 15vw"></input> <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet'+next+'" name="orderQuantity" type="number" style="width: 15vw"></input> <p class="title"><h4>Order Action: </h4></p> <select name="orderAction'+next+'" class="form-control"> <option value="buy">buy</option> <option value="sell">sell</option> </select> <p class="title"><h4>Order Price Type: </h4></p> <select id="priceType'+next+'" name="orderPriceType'+next+'" class="form-control" data-trading-ticket-num="'+next+'"> <option value="market">market</option> <option value="limit">limit</option> </select> <p class="title hidden limit'+next+'">Order Limit Price: </p> <input id="orderLimitPrice'+next+'" class="hidden form-control limit'+next+'" name="orderLimitPrice" type="number"></input> <p class="title"><h4>Order Expiration: </h4></p> <select name="orderExpiration'+next+'" class="form-control"> <option value="day">day</option> <option value="gtc">gtc</option> </select> <br> </div>'
+       var newIn = `
+                    <tbody id="trading-ticket-input`+ next + `" class="form-group trading-ticket-form">
+                    <tr>
+                    <td><input class="form-control" id="orderSymbolSet`+ next + `" name="orderSymbol" style="width: 8vw"></input></td>
+                    <td><input class="form-control" id="orderQuantitySet`+ next + `" name="orderQuantity" type="number" style="width: 8vw"></input></td> 
+                    <td>           
+                        <select name="orderAction`+ next + `" class="form-control" style="width: 8vw">
+                            <option value="buy">buy</option>
+                            <option value="sell">sell</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="priceType`+ next + `" name="orderPriceType`+ next + `" class="form-control" data-trading-ticket-num="`+ next + `" style="width: 12vw">
+                            <option value="market">market</option>
+                            <option value="limit">limit</option>
+                        </select>
+                    </td>
+                    <td><input id="orderLimitPrice`+ next + `" class="hidden form-control limit`+ next + `" name="orderLimitPrice" type="number" style="width: 8vw"></input></td>
+                    <td>
+                        <select name="orderExpiration`+ next + `" class="form-control" style="width: 8vw">
+                            <option value="day">day</option>
+                            <option value="gtc">gtc</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="btn btn-danger" id="`+ next + `" onclick="$('#trading-ticket-input`+ next + `').empty();" >X</button></td>
+                </tr>
+                </tbody>
+                `
+        var newInput = $(newIn);
+        $(addto).after(newInput);
+        $('#priceType'+next).on('change', function() {
+            var num = $(this).data("trading-ticket-num");
+            if ($(this).val() == 'limit') {
+              $('.limit'+num).removeClass('hidden');
+            }
+            else if($(this).val() == 'market') {
+              $('.limit'+num).addClass('hidden');
+            }
+        });
+    });
+ 
 </script>
