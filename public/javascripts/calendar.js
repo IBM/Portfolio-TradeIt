@@ -1,6 +1,3 @@
-//https://bl.ocks.org/arpitnarechania/4b4aa79b04d2e79f30765674b4c24ace
-//Released under the The MIT License.
-
 var today = new Date();
 var animDuration =1000,
 	min = 0, 
@@ -9,9 +6,6 @@ var animDuration =1000,
 function getMaxTrades(data) {
   return data.reduce((max, p) => p.trades > max ? p.trades : max, data[0].trades);
 }
-
-//save data to a file (for debug)
-
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -267,7 +261,6 @@ function portfolioSelect(data){
     select = document.getElementById('portfolioSelect');
     let unique = [...new Set(data.portfolios.map(item => item.name))];
     if(unique.length > 0){
-        //$("#portfolioSelect option[value='loading']").remove();
         for (var i = 0; i<=unique.length; i++){
             if(unique[i] != undefined){
                 var opt = document.createElement('option');
@@ -331,8 +324,8 @@ function renderCalendar(generatedData){
                                             .attr("id","total-wrapper")
                                             .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (30) + ")");
 
-	for (var i=0; i<7; i++)
-	{    
+	
+    for (var i=0; i<7; i++){    
 		svg.append("text")
 		   .attr("transform", "translate(8," + cellSize*(i+1) + ")")
 		   .style("text-anchor", "end")
@@ -363,10 +356,10 @@ function renderCalendar(generatedData){
           .style("stroke","black")
           .text(function(d,i){ return month[i] });
 
-	  var nestData = d3.nest()
-                       .key(function(d) {return d.timestamp.toDateString();})
-                       .rollup(function(d){return d[0].trades})
-                       .map(generatedData);
+	var nestData = d3.nest()
+                     .key(function(d) {return d.timestamp.toDateString();})
+                     .rollup(function(d){return d[0].trades})
+                     .map(generatedData);
 
 	var rectWrapper = d3.select("#total-wrapper")
 						.append("g")
@@ -563,9 +556,9 @@ function drawGantt(data){
 		});
 }
 
-//initialize with a set of trades
+//initialize with a portfolio and set of trades (optional)
 function init(){
-    createPortfolio('TradeIt Portfolio', Date.parse("01 Jan 2018 10:00:00 GMT"),'trade it portfolio')
+    createPortfolio('TradeIt Portfolio', Date.parse("01 Jan 2018 15:00:00 GMT"),'trade it portfolio')
     trades = [
         ["2018-10-11 14:52:00 GMT",[{"instrumentId":"CX_US4642872000_NYQ","name":"iShares Core S&P 500","quantity":"100","ticker":"IVV","brokerage":"DUMMY","currency":"USD"}]],
         ["2018-2-2 6:57:00 GMT",[{"instrumentId":"CX_IE00BY7QL619_NYQ","name":"JOHNSON CONTROLS INTERNATIONAL PLC","quantity":"100","ticker":"JCI","brokerage":"DUMMY","currency":"CAD"}]],
@@ -585,6 +578,6 @@ function init(){
 }
 
 $(document).ready(function() {
+    //init()
     getPortfolios()
-
 });

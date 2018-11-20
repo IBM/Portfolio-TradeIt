@@ -100,13 +100,15 @@
     </div>
   {{> footer }}
 </body>
-
 </html>
+
+
 <script src="/javascripts/jquery-2.2.0.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="http://static.mentful.com/gantt-chart-d3v2.js"></script>
 <script src="/javascripts/calendar.js"></script>
+
 <script>
     $(function(){
         $('#reviewOrder').on('click', function(){
@@ -170,34 +172,32 @@
     var dataArray = [];
 
     var incrementSuccessReviews = function(data) {
-      if(data.status == "REVIEW_ORDER") {
-        successReviewCount += 1;
-        dataArray.push(data);
-      } else if(data.status == "ERROR"){
-        $('#shortMessage').val(data.shortMessage);
-        $('#longMessage').val(data.longMessages[0]);
-        $('#sendErrorMgs').click();
-      }
-      if (successReviewCount == totalTrades) {
+        if(data.status == "REVIEW_ORDER") {
+            successReviewCount += 1;
+            dataArray.push(data);
+        } else if(data.status == "ERROR"){
+            $('#shortMessage').val(data.shortMessage);
+            $('#longMessage').val(data.longMessages[0]);
+            $('#sendErrorMgs').click();
+        }
+        if (successReviewCount == totalTrades) {
         parseResult(dataArray);
-      }
+        }
     };
 
     var parseResult = function(dataArray){
     orderSuccessCount = 0;
-      for (var j = 0; j < dataArray.length; j+=1) {
-        //if (j == 0) continue;
-        var addto = "#review-block-"+j;
-        var num = j+1;
-        var newIn = '<div id="review-block-'+num+'" class="review-blocks"> <span id="orderSymbol'+num+'"></span><br> <span id="orderAction'+num+'"></span><br> <span id="orderQuantity'+num+'"></span><br> <span id="orderExpiration'+num+'"></span><br> <span id="orderPrice'+num+'"></span><br> <span id="orderValueLabel'+num+'"></span><br> <span id="orderMessage'+num+'"></span><br> <span id="timestamp'+num+'"></span><br> <span id="buyingPower'+num+'"></span><br> <span id="availableCash'+num+'"></span><br> <span id="estimatedOrderCommission'+num+'"></span> </div>';
-        //var newInput = $(newIn);
-        $('#review-blocks').append(newIn); 
-      } 
+        for (var j = 0; j < dataArray.length; j+=1) {
+            var addto = "#review-block-"+j;
+            var num = j+1;
+            var newIn = '<div id="review-block-'+num+'" class="review-blocks"> <span id="orderSymbol'+num+'"></span><br> <span id="orderAction'+num+'"></span><br> <span id="orderQuantity'+num+'"></span><br> <span id="orderExpiration'+num+'"></span><br> <span id="orderPrice'+num+'"></span><br> <span id="orderValueLabel'+num+'"></span><br> <span id="orderMessage'+num+'"></span><br> <span id="timestamp'+num+'"></span><br> <span id="buyingPower'+num+'"></span><br> <span id="availableCash'+num+'"></span><br> <span id="estimatedOrderCommission'+num+'"></span> </div>';
+            $('#review-blocks').append(newIn); 
+        } 
 
-      $('#reviewScreen').removeClass('hidden');
-      $('#review-buttons').removeClass('hidden');
-      $('#tradeInput').addClass('hidden');
-      for (var i = 0; i < dataArray.length; i+=1) {
+        $('#reviewScreen').removeClass('hidden');
+        $('#review-buttons').removeClass('hidden');
+        $('#tradeInput').addClass('hidden');
+        for (var i = 0; i < dataArray.length; i+=1) {
         var data = dataArray[i];
         var num = i+1;
         if(data.status == "REVIEW_ORDER"){
@@ -257,33 +257,33 @@
       if(data.status == 'SUCCESS') {
         orderDataArray.push(data);
         orderSuccessCount += 1;
-      } else if(data.status == 'ERROR') {
-//        $('#shortMessage').val(data.shortMessage);
-//        $('#longMessage').val(data.longMessages[0]);
-//        $('#sendErrorMgs').click();
+      }else if(data.status == 'ERROR') {
+        $('#shortMessage').val(data.shortMessage);
+        $('#longMessage').val(data.longMessages[0]);
+        $('#sendErrorMgs').click();
       }
       if (orderSuccessCount == totalTrades) {
         orderPlaced(orderDataArray);
       }
     };
     var orderPlaced = function(orderDataArray){
-      $('#confirmation-blocks').empty()
-      for (var j = 0; j < orderDataArray.length; j+=1) {
+        $('#confirmation-blocks').empty()
+        for (var j = 0; j < orderDataArray.length; j+=1) {
         //if (j == 0) continue;
         var addto = "#confirmation-block-"+j;
         var num = j+1;
         var newIn = '<div id="confirmation-block-'+num+'" class="confirmation-blocks"> <span style="font-size: large;" id="confirmationMessage'+num+'"></span><br><br> <span style="font-size: large;" id="orderNumber'+num+'"></span> </div>';
-       // var newInput = $(newIn);
-       $('#confirmation-blocks').append(newIn); 
-      }
-      $('#reviewScreen').addClass('hidden');
-      $('#confirmationScreen').removeClass('hidden');
-      $('#review-buttons').addClass('hidden')
-      $('#backToTT').removeClass('hidden');
-      $('#backToPortfolio').removeClass('hidden');
-      date_options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true} 
-      trades = []
-      for (var i = 0; i < orderDataArray.length; i+=1) {
+        // var newInput = $(newIn);
+        $('#confirmation-blocks').append(newIn); 
+        }
+        $('#reviewScreen').addClass('hidden');
+        $('#confirmationScreen').removeClass('hidden');
+        $('#review-buttons').addClass('hidden')
+        $('#backToTT').removeClass('hidden');
+        $('#backToPortfolio').removeClass('hidden');
+        date_options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true} 
+        trades = []
+        for (var i = 0; i < orderDataArray.length; i+=1) {
         var data = orderDataArray[i];
         var num = i+1;
         if(data.status == 'SUCCESS'){
@@ -332,8 +332,7 @@
         e.preventDefault();
         var addto = "#trading-ticket-input"+next;
         next = next + 1;
-      //var newIn = '<div id="trading-ticket-input'+next+'" class="form-group trading-ticket-form"> <input class="hidden" id="accountNumber'+next+'" name="accountNumber" value={{data.accountNumber}}></input> <p class="title"><h4>Ticker Name: </h4></p><input class="form-control" id="orderSymbolSet'+next+'" name="orderSymbol" style="width: 15vw"></input> <p class="title"><h4>Order Quantity: </h4></p><input class="form-control" id="orderQuantitySet'+next+'" name="orderQuantity" type="number" style="width: 15vw"></input> <p class="title"><h4>Order Action: </h4></p> <select name="orderAction'+next+'" class="form-control"> <option value="buy">buy</option> <option value="sell">sell</option> </select> <p class="title"><h4>Order Price Type: </h4></p> <select id="priceType'+next+'" name="orderPriceType'+next+'" class="form-control" data-trading-ticket-num="'+next+'"> <option value="market">market</option> <option value="limit">limit</option> </select> <p class="title hidden limit'+next+'">Order Limit Price: </p> <input id="orderLimitPrice'+next+'" class="hidden form-control limit'+next+'" name="orderLimitPrice" type="number"></input> <p class="title"><h4>Order Expiration: </h4></p> <select name="orderExpiration'+next+'" class="form-control"> <option value="day">day</option> <option value="gtc">gtc</option> </select> <br> </div>'
-       var newIn = `
+        var newIn = `
                     <tbody id="trading-ticket-input`+ next + `" class="form-group trading-ticket-form">
                     <tr>
                     <td><input class="form-control" id="orderSymbolSet`+ next + `" name="orderSymbol" style="width: 8vw"></input></td>
@@ -373,5 +372,4 @@
             }
         });
     });
- 
 </script>
