@@ -72,11 +72,80 @@ function sameDay(d1, d2) {
       d1.getDate() === d2.getDate();
 }
 
+function createPortfolio(name,timestamp,type){
+    WRITER_USER_ID = "hentrishishadideraleared"
+    WRITER_PASSWORD = "dba6f3b3e3aeafe99fdd4b4cc4af393389383462"
+    READER_USER_ID = "wernevenscengloonuringth"
+    READER_PASSWORD = "4840281bab1704a8eb92284cf8f43789ed7b4646"
+
+    BASE_URL = "https://investment-portfolio.mybluemix.net/"
+    headers = {
+        'Content-Type': "application/json",
+        'Accept': "application/json"
+        }
+    my_portfolio = {
+            "timestamp": timestamp,
+            'closed':false,
+            'data':{'type':type},
+            'name':name
+    }
+    //create  the portfolio
+    console.log('create portfolio' + String(name));
+    $.ajax({
+        beforeSend: function(xhr){ 
+            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(WRITER_USER_ID + ":" + WRITER_PASSWORD));
+        },
+        headers: headers,
+        data: JSON.stringify(my_portfolio),
+        dataType: "json",
+        method: "POST",
+        url: BASE_URL + 'api/v1/portfolios/',
+        success: created_portfolio
+    });   
+}
+
+function createPortfolioHoldings(name,timestamp,holdings){
+    WRITER_USER_ID = "hentrishishadideraleared"
+    WRITER_PASSWORD = "dba6f3b3e3aeafe99fdd4b4cc4af393389383462"
+    READER_USER_ID = "wernevenscengloonuringth"
+    READER_PASSWORD = "4840281bab1704a8eb92284cf8f43789ed7b4646"
+
+    BASE_URL = "https://investment-portfolio.mybluemix.net/"
+    headers = {
+        'Content-Type': "application/json",
+        'Accept': "application/json"
+    }
+    data = {
+        'timestamp': timestamp,
+        'holdings': holdings
+    }
+    //create  the portfolio
+    console.log('create holdings for ' + String(name));
+    $.ajax({
+        beforeSend: function(xhr){ 
+            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(WRITER_USER_ID + ":" + WRITER_PASSWORD));
+        },
+        headers: headers,
+        data: JSON.stringify(data),
+        dataType: "json",
+        method: "POST",
+        url: BASE_URL + 'api/v1/portfolios/' + name + "/holdings",
+        success: created_holdings
+    });   
+}
+function created_portfolio(){
+    alert("Portfolio created successfully.")
+}
+function created_holdings(){
+    alert("Trades added to Investment Portfolio successfully.")
+}
+
+//get list of portfolios
 function getPortfolios() {
-    WRITER_USER_ID = "jectselizeddevercelingui"
-    WRITER_PASSWORD = "e1036635cf9ed00aec2c1ec2ee3589b2195fa4b7"
-    READER_USER_ID = "thureshistontherationeyi"
-    READER_PASSWORD = "5863c448737092d933493966915800b4b9bed20e"
+    WRITER_USER_ID = "hentrishishadideraleared"
+    WRITER_PASSWORD = "dba6f3b3e3aeafe99fdd4b4cc4af393389383462"
+    READER_USER_ID = "wernevenscengloonuringth"
+    READER_PASSWORD = "4840281bab1704a8eb92284cf8f43789ed7b4646"
 
     //process.env.CRED_PORTFOLIO_USERID_R;
     //process.env.CRED_PORTFOLIO_PWD_R;
@@ -101,11 +170,12 @@ function getPortfolios() {
     });
 }
 
+//get holdings just for dates
 function getPortfolioDates(portfolio) {
-    WRITER_USER_ID = "jectselizeddevercelingui"
-    WRITER_PASSWORD = "e1036635cf9ed00aec2c1ec2ee3589b2195fa4b7"
-    READER_USER_ID = "thureshistontherationeyi"
-    READER_PASSWORD = "5863c448737092d933493966915800b4b9bed20e"
+    WRITER_USER_ID = "hentrishishadideraleared"
+    WRITER_PASSWORD = "dba6f3b3e3aeafe99fdd4b4cc4af393389383462"
+    READER_USER_ID = "wernevenscengloonuringth"
+    READER_PASSWORD = "4840281bab1704a8eb92284cf8f43789ed7b4646"
 
     //process.env.CRED_PORTFOLIO_USERID_R;
     //process.env.CRED_PORTFOLIO_PWD_R;
@@ -128,11 +198,13 @@ function getPortfolioDates(portfolio) {
         success: getDates
     });
 }
+
+//get holdings from an investment portfolio
 function getPortfolioHoldings(portfolio,selected_date) {
-    WRITER_USER_ID = "jectselizeddevercelingui"
-    WRITER_PASSWORD = "e1036635cf9ed00aec2c1ec2ee3589b2195fa4b7"
-    READER_USER_ID = "thureshistontherationeyi"
-    READER_PASSWORD = "5863c448737092d933493966915800b4b9bed20e"
+    WRITER_USER_ID = "hentrishishadideraleared"
+    WRITER_PASSWORD = "dba6f3b3e3aeafe99fdd4b4cc4af393389383462"
+    READER_USER_ID = "wernevenscengloonuringth"
+    READER_PASSWORD = "4840281bab1704a8eb92284cf8f43789ed7b4646"
     //process.env.CRED_PORTFOLIO_USERID_R;
     //process.env.CRED_PORTFOLIO_PWD_R;
     //process.env.CRED_PORTFOLIO_USERID_W;
@@ -155,13 +227,25 @@ function getPortfolioHoldings(portfolio,selected_date) {
             holdings = []
             for(t=0;t<data.holdings.length;t++){
                 if(data.holdings[t].hasOwnProperty('timestamp') && sameDay(new Date(data.holdings[t].timestamp),new Date(selected_date))){
-                    for(h=0;h<data.holdings[t].holdings.holdings.length;h++){
-                        if(data.holdings[t].holdings.holdings[h].quantity>0){
-                            orderAction = 'buy'
-                        }else if(data.holdings[t].holdings.holdings[h].quantity<0){
-                            orderAction = 'sell'
+                    //sometimes holdings is nested extra (has an extra 'holdings') depending on what was used to create it :/
+                    if(data.holdings[t].holdings.hasOwnProperty("holdings")){
+                        for(h=0;h<data.holdings[t].holdings.holdings.length;h++){
+                            if(data.holdings[t].holdings.holdings[h].quantity>0){
+                                orderAction = 'buy'
+                            }else if(data.holdings[t].holdings.holdings[h].quantity<0){
+                                orderAction = 'sell'
+                            }
+                            holdings.push({"from":new Date(data.holdings[t].timestamp),"to":addMinutes(new Date(data.holdings[t].timestamp),30),"name":data.holdings[t].holdings.holdings[h].name,"orderAction":orderAction,"quantity":data.holdings[t].holdings.holdings[h].quantity})
                         }
-                        holdings.push({"from":new Date(data.holdings[t].timestamp),"to":addMinutes(new Date(data.holdings[t].timestamp),30),"name":data.holdings[t].holdings.holdings[h].name,"orderAction":orderAction,"quantity":data.holdings[t].holdings.holdings[h].quantity})
+                    }else{
+                        for(h=0;h<data.holdings[t].holdings.length;h++){
+                            if(data.holdings[t].holdings[h].quantity>0){
+                                orderAction = 'buy'
+                            }else if(data.holdings[t].holdings[h].quantity<0){
+                                orderAction = 'sell'
+                            }
+                            holdings.push({"from":new Date(data.holdings[t].timestamp),"to":addMinutes(new Date(data.holdings[t].timestamp),30),"name":data.holdings[t].holdings[h].name,"orderAction":orderAction,"quantity":data.holdings[t].holdings[h].quantity})
+                        }
                     }
                 }
             }
@@ -169,13 +253,16 @@ function getPortfolioHoldings(portfolio,selected_date) {
         }
     });
 }
-function calendarFromHoldings(portfolio){
+
+//get selection of portfolio
+function calendarFromHoldings(){
     d = document.getElementById("portfolioSelect").value;
     if(d != 'loading'){
         getPortfolioDates(d)
     }
 }
 
+//get unique portfolios
 function portfolioSelect(data){
     select = document.getElementById('portfolioSelect');
     let unique = [...new Set(data.portfolios.map(item => item.name))];
@@ -192,8 +279,8 @@ function portfolioSelect(data){
     }
 }
 
+//get unique dates and number of trades for those dates on a portfolio
 function getDates(data){
-    //alert(JSON.stringify(data))
     if(data != {}){
         console.log(data)
         //round to nearest day, and reduce to sum of trades per day for calendar heatmap
@@ -217,6 +304,7 @@ function getDates(data){
     renderCalendar(result)
 }
 
+//build the calendar heatmap based on the portfolio returned from the Investment Portfolio service
 function renderCalendar(generatedData){
     d3.selectAll("#calendar-wrapper > *").remove();
 	var width = $("#calendar-wrapper").width(),
@@ -353,6 +441,7 @@ function animateColorTransition(color,nestData){
 	    });
 }
 
+//when a calendar day is clicked
 function clickedDay(d){
 	d3.selectAll(".day")
 	   .transition()
@@ -391,6 +480,7 @@ function clickedDay(d){
 	}
 }
 
+//draw the Gantt chart given a selection of a date from the primary calendar heatmap
 function drawGantt(data){
 
     var margin = {top: 50, right: 50, bottom: 50, left: 150},
@@ -454,9 +544,9 @@ function drawGantt(data){
 
 		svg.selectAll(".buy,.sell")
 		.on('mouseover', function(d) {
-
+            date_options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true} 
 			tooltip.select('.name').html("<b>" + d.name + "</b>");
-			tooltip.select('.tempRange').html(d.from.getHours() + ":" + d.from.getMinutes());
+			tooltip.select('.tempRange').html(d.from.toLocaleString('en-US', date_options).replace(',',''));
 			tooltip.select('.orderAction').html(d.orderAction + ": " + d.quantity);
 
 			tooltip.style('display', 'block');
@@ -473,6 +563,28 @@ function drawGantt(data){
 		});
 }
 
+//initialize with a set of trades
+function init(){
+    createPortfolio('TradeIt Portfolio', Date.parse("01 Jan 2018 10:00:00 GMT"),'trade it portfolio')
+    trades = [
+        ["2018-10-11 14:52:00 GMT",[{"instrumentId":"CX_US4642872000_NYQ","name":"iShares Core S&P 500","quantity":"100","ticker":"IVV","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-2-2 6:57:00 GMT",[{"instrumentId":"CX_IE00BY7QL619_NYQ","name":"JOHNSON CONTROLS INTERNATIONAL PLC","quantity":"100","ticker":"JCI","brokerage":"DUMMY","currency":"CAD"}]],
+        ["2018-7-27 19:56:00 GMT",[{"instrumentId":"CX_US4878361082_NYQ","name":"KELLOGG","quantity":"100","ticker":"K","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-7-3 11:23:00 GMT",[{"instrumentId":"CX_US1912161007_NYQ","name":"COCA-COLA","quantity":"100","ticker":"KO","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-9-19 19:36:00 GMT",[{"instrumentId":"CX_US5486611073_NYQ","name":"LOWES COMPANIES INC","quantity":"100","ticker":"LOW","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-8-6 5:59:00 GMT",[{"instrumentId":"CX_US4642872422_NYQ","name":"iShares iBoxx $ Investment Grade Corporate Bond","quantity":"100","ticker":"LQD","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-8-7 5:32:00 GMT",[{"instrumentId":"CX_US56585AAG76_USD","name":"MARATHON PETROLEUM CORP","quantity":"100","ticker":"MPC","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-7-5 10:13:00 GMT",[{"instrumentId":"CX_US651639AN69_USD","name":"NEWMONT MINING CORP","quantity":"100","ticker":"NEM","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-6-15 3:40:00 GMT",[{"instrumentId":"CX_US70450Y1038_NSQ","name":"PAYPAL HOLDINGS INC","quantity":"100","ticker":"PYPL","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-4-13 10:58:00 GMT",[{"instrumentId":"CX_US9100471096_NYQ","name":"UNITED CONTINENTAL HOLDINGS INC","quantity":"100","ticker":"UAL","brokerage":"DUMMY","currency":"USD"}]],
+        ["2018-7-26 22:47:00 GMT",[{"instrumentId":"CX_US30231GAN25_USD","name":"EXXON MOBIL CORP","quantity":"100","ticker":"XOM","brokerage":"DUMMY","currency":"USD"}]],
+    ]
+    for(i=0;i<trades.length;i+=1){
+        createPortfolioHoldings('TradeIt Portfolio',Date.parse(trades[i][0]),trades[i][1])
+    }
+}
+
 $(document).ready(function() {
     getPortfolios()
+
 });

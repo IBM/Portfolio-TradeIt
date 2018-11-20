@@ -108,19 +108,6 @@
 <script src="http://static.mentful.com/gantt-chart-d3v2.js"></script>
 <script src="/javascripts/calendar.js"></script>
 <script>
-    `
-            var postData = {};
-            postData.token = "{{data.sessionToken}}";
-            postData.accountNumber = $('#accountNumber1').val();
-            alert(JSON.stringify(postData))
-            $.ajax({
-                data: postData,
-                dataType: "jsonp",
-                method: "POST",
-                url: "https://ems.qa.tradingticket.com/api/v2/position/getPositions",
-                success: test
-            });
-    `
     $(function(){
         $('#reviewOrder').on('click', function(){
            getPreviewOrder();
@@ -145,7 +132,6 @@
       //figure out total # of trades:
       totalTrades = 0
       for (var j=1; j<=next; j+=1) {
- 
           if($('#orderSymbolSet'+j).length > 0 && $('#orderSymbolSet'+j).val().length > 0 && $('#orderQuantitySet'+j).val().length > 0){
               totalTrades += 1
           }
@@ -198,6 +184,7 @@
     };
 
     var parseResult = function(dataArray){
+    orderSuccessCount = 0;
       for (var j = 0; j < dataArray.length; j+=1) {
         //if (j == 0) continue;
         var addto = "#review-block-"+j;
@@ -242,9 +229,16 @@
           $('#placeOrder').addClass("disabled");
           for (var i = 0; i < dataArray.length; i+=1) {
             var data = dataArray[i];
-            setTimeout(function() {
-              placeOrder(data.token, data.orderId);
-            }, i*5000);
+            //only send one trade - limitation of Trade.It Dummy Brokerage is one trade at a time due to throttling.
+            //Reach out to Trade.It for more details
+            //
+            //mock SUCCESS to keep code mostly the same
+            if(dataArray.length > 1 ){
+                data.status = "SUCCESS";
+                incrementSuccessOrdersPlaced(data);
+            }else{
+                placeOrder(data.token, data.orderId);
+            }
           }
       });
     };
@@ -260,7 +254,6 @@
     var orderSuccessCount = 0;
     var orderDataArray = [];
     var incrementSuccessOrdersPlaced = function(data) {
-        alert(JSON.stringify(data))
       if(data.status == 'SUCCESS') {
         orderDataArray.push(data);
         orderSuccessCount += 1;
@@ -275,7 +268,6 @@
     };
     var orderPlaced = function(orderDataArray){
       $('#confirmation-blocks').empty()
-      //alert(JSON.stringify(orderDataArray))
       for (var j = 0; j < orderDataArray.length; j+=1) {
         //if (j == 0) continue;
         var addto = "#confirmation-block-"+j;
@@ -289,15 +281,43 @@
       $('#review-buttons').addClass('hidden')
       $('#backToTT').removeClass('hidden');
       $('#backToPortfolio').removeClass('hidden');
-      
+      date_options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true} 
+      trades = []
       for (var i = 0; i < orderDataArray.length; i+=1) {
         var data = orderDataArray[i];
         var num = i+1;
         if(data.status == 'SUCCESS'){
-            $('#confirmationMessage'+num).text(data.confirmationMessage);
-            $('#orderNumber'+num).text("orderNumber: " + data.orderNumber);
+            //only send one trade - limitation of Trade.It Dummy Brokerage is one trade at a time due to throttling.
+            //Reach out to Trade.It for more details
+            //
+            //if mocking up multiple trades at once, generate sample order numbers and proceed with only else
+            if(data.orderNumber == undefined){ 
+                //place trade from ticket review
+                data.orderNumber =  Math.random().toString(16).substring(2, 15) + Math.random().toString(16).substring(2, 15)
+                data.confirmationMessage = "Your order message " + data.orderNumber + " to " + data.orderDetails.orderAction + " " + String(data.orderDetails.orderQuantity) + " shares of " + String(data.orderDetails.orderSymbol).toUpperCase()
+                data.broker = "Dummy";
+                data.date = new Date()
+                trades.push({'orderNumber':data.orderNumber,'ticker':String(data.orderDetails.orderSymbol).toUpperCase(),'quantity':data.orderDetails.orderQuantity,'instrumentId':data.orderDetails.orderSymbol,'name':data.orderDetails.orderSymbol})
+                if(data.orderDetails.orderPrice == "Market"){
+                    data.confirmationMessage += " at market price has been successfully transmitted to your broker at " + data.date.toLocaleString('en-US', date_options).replace(',','')//String(data.date.getDate()) + "/" + String(data.date.getMonths()) + "/" + String(data.date.get)
+                }else{
+                    data.confirmationMessage += " at a limit price of " + data.orderDetails.orderLimitPrice + " has been successfully transmitted to your broker at " + data.date.toLocaleString('en-US', date_options).replace(',','')
+                }
+                $('#confirmationMessage'+num).text(data.confirmationMessage);   
+                $('#orderNumber'+num).text("orderNumber: " + data.orderNumber);
+            }else{
+                //place trade from successful order
+                trades.push({'orderNumber':data.orderNumber,'ticker':String(data.orderInfo.symbol).toUpperCase(),'quantity':data.orderInfo.quantity,'instrumentId':data.orderInfo.symbol,'name':data.orderInfo.symbol})
+                $('#confirmationMessage'+num).text(data.confirmationMessage);
+                $('#orderNumber'+num).text("orderNumber: " + data.orderNumber);
+            }
         }
       }
+      console.log(trades)
+        portfolio = document.getElementById("portfolioSelect").value;
+        if(portfolio != 'loading'){
+            createPortfolioHoldings(portfolio,new Date(),trades)
+        }
     }
     var backToTradingTicket = function(){
         $('#backToTT').append("<input class='hidden' name='accountNumber' value=" + "{{data.accountNumber}}" + "></input>");
