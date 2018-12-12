@@ -1,12 +1,12 @@
-# Watch live news for market changes which could affect your investments
+# Place trades through your online broker via simple API calls
 
 Nobody likes losing money in the market. Investors want to be informed at all times of the current state of the market, and need to be ready to make trades at a moment’s notice. Imagine that you are a financial institution that wants to provide its client base with the capability to trade stocks, exchange-traded funds, and currencies, without having the need to leave their platform and manage relationships with external brokerage firms. To achieve this, you would need a way to securely integrate with online brokers for your users and allow them to make trades directly with their connected accounts seamlessly. Trade.it enables these capabilities that by providing the API infrastructure that links retail investors and financial institutions with online financial brokers.
 
-In this code pattern, we will create a web application built on Node.Js which integrates with the TradeIt APIs to provide users an end-to-end way of making trades, buying or selling securities, against a mock brokerage. The application showcases the workflow of a customer authenticating themselves against this mock broker, and place trades through them securely. After selecting their options for the trade, the user is returned a summary of a trade ticket to review, and receives the order number and confirmation of the trade.
+In this code pattern, we will create a web application built on Node.Js which integrates with the [TradeIt](https://www.trade.it/) APIs to provide users an end-to-end way of making trades, buying or selling securities, against a mock brokerage. The application showcases the workflow of a customer authenticating themselves against this mock broker, and place trades through them securely. After selecting their options for the trade, the user is returned a summary of a trade ticket to review, and receives the order number and confirmation of the trade.
 
 This code pattern is for developers looking to start building applications with TradeIt integration. When the reader has completed this code pattern, they will understand how to:
 
-* Build a Node.js web application integrated with the Trade.it SDK 
+* Build a Node.js web application integrated with the [Trade.it](https://www.trade.it/) SDK 
 * Store user authentication sessions to allow for multiple trades while signed in. 
 * Issue multiple trades based on Portfolio Optimization results 
 
