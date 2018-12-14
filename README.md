@@ -24,7 +24,7 @@ This code pattern is for developers who want to start building applications with
 
 # Included components
 
-+ [TradeIt](https://www.trade.it/)is the API infrastructure that links retail investors and app developers with any online financial broker.
++ [TradeIt](https://www.trade.it/) is the API infrastructure that links retail investors and app developers with any online financial broker.
 + [Investment Portfolio](https://console.ng.bluemix.net/catalog/services/investment-portfolio) is the service that lets you store, update, and query your investment portfolios and associated holdings using flexible object definitions.
 > The Investment Portfolio service is available for free on [IBM Cloud](https://console.bluemix.net).
 
@@ -36,12 +36,12 @@ This code pattern is for developers who want to start building applications with
 # Running the application
 
 ## Manually deploy to local machine
-1. [Set up your machine](#1-setup-your-machine)
+1. [Set up your machine](#1-set-up-your-machine)
 2. [Clone the repository](#2-clone-the-repository)
-3. [Create the Investment Portfolio service](#3-create-investment-portfolio-service)
-4. [Configure the .env file](#4-configure-env-file)
-5. [Create the TradeIt service](#5-create-tradeit-service)
-6. [Run the application with NPM](#6-run-application-with-npm)
+3. [Create the Investment Portfolio service](#3-create-the-investment-portfolio-service)
+4. [Configure the .env file](#4-configure-the-env-file)
+5. [Create the TradeIt service](#5-create-the-tradeit-service)
+6. [Run the application with NPM](#6-run-the-application-with-npm)
 
 ### 1. Set up your machine
 
