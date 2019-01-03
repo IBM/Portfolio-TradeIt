@@ -60,7 +60,7 @@
     var storePostDataToLocalStorageIfExists = function() {
       var tradeit_trades = JSON.parse('{{{json trade}}}');
       console.log(tradeit_trades);
-      localStorage.setItem('optimizer_post_data', JSON.stringify(tradeit_trades));
+      sessionStorage.setItem('optimizer_post_data', JSON.stringify(tradeit_trades));
     };
 
     var broker = 'Dummy';

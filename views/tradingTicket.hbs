@@ -122,7 +122,7 @@
     };
     
     var fillPostDataIfExists = function() {
-      var tradeit_trades = JSON.parse(localStorage.getItem('optimizer_post_data'));
+      var tradeit_trades = JSON.parse(sessionStorage.getItem('optimizer_post_data'));
       if ("trades" in tradeit_trades) {
         for (var i = 1; i < tradeit_trades.trades.length; i+=1) {
           $("#addMore").click();
