@@ -7,7 +7,6 @@ var jsonParser = parser.json();
 var cookie = require('cookie');
 
 var postData = {};
-var tradeDataFromOptimizer = {};
 
 var options = {
     method: 'post',
@@ -20,6 +19,7 @@ var options = {
 /* Request to getBrokerList endpoint */
 /*************************************************/
 router.get('/', function(req, resp, next) {
+    var tradeDataFromOptimizer = {};
     postData.apiKey = 'tradeit-test-api-key';
     options.url = 'https://ems.qa.tradingticket.com/api/v1/preference/getBrokerList';
 
@@ -27,7 +27,7 @@ router.get('/', function(req, resp, next) {
         if(err){
             resp.render('error');
         }
-        resp.render('index', { list: body.brokerList, apiKey: postData.apiKey });
+        resp.render('index', { list: body.brokerList, apiKey: postData.apiKey, trade: tradeDataFromOptimizer });
     };
 
     request(options, callback)
@@ -35,7 +35,7 @@ router.get('/', function(req, resp, next) {
 
 router.post('/', urlencodedParser, function(req, resp, next) {
     // Get post request data and store internally in server.
-    tradeDataFromOptimizer = JSON.parse(req.body.postdata);
+    var tradeDataFromOptimizer = JSON.parse(req.body.postdata);
     console.log(tradeDataFromOptimizer);
 
     postData.apiKey = 'tradeit-test-api-key';
@@ -45,7 +45,7 @@ router.post('/', urlencodedParser, function(req, resp, next) {
         if(err){
             resp.render('error');
         }
-        resp.render('index', { list: body.brokerList, apiKey: postData.apiKey });
+        resp.render('index', { list: body.brokerList, apiKey: postData.apiKey, trade: tradeDataFromOptimizer });
     };
 
     request(options, callback)
@@ -94,7 +94,7 @@ router.post('/portfolio', urlencodedParser, function(req, resp, next){
 /* Go to a trading ticket screen */
 /*********************************/
 router.post('/tradingTicket', urlencodedParser, function(req, resp, next){
-    resp.render('tradingTicket', {data: req.body, trade: tradeDataFromOptimizer});
+    resp.render('tradingTicket', {data: req.body});
 });
 
 router.post('/authError', urlencodedParser, function(req, resp, next){

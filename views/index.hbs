@@ -53,6 +53,16 @@
 <script src="/javascripts/jquery-2.2.0.min.js" type="text/javascript"></script>
 <script src="/javascripts/jquery_cookie.js"></script>
 <script>
+    $(document).ready(function() {
+      storePostDataToLocalStorageIfExists();
+    });
+
+    var storePostDataToLocalStorageIfExists = function() {
+      var tradeit_trades = JSON.parse('{{{json trade}}}');
+      console.log(tradeit_trades);
+      localStorage.setItem('optimizer_post_data', JSON.stringify(tradeit_trades));
+    };
+
     var broker = 'Dummy';
     $(function(){
         var $form = $('#form');
