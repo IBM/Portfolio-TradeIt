@@ -7,6 +7,7 @@ var jsonParser = parser.json();
 var cookie = require('cookie');
 
 var postData = {};
+var tradeDataFromOptimizer = {};
 
 var options = {
     method: 'post',
@@ -32,6 +33,23 @@ router.get('/', function(req, resp, next) {
     request(options, callback)
 });
 
+router.post('/', urlencodedParser, function(req, resp, next) {
+    // Get post request data and store internally in server.
+    tradeDataFromOptimizer = JSON.parse(req.body.postdata);
+    console.log(tradeDataFromOptimizer);
+
+    postData.apiKey = 'tradeit-test-api-key';
+    options.url = 'https://ems.qa.tradingticket.com/api/v1/preference/getBrokerList';
+
+    function callback(err, res, body) {
+        if(err){
+            resp.render('error');
+        }
+        resp.render('index', { list: body.brokerList, apiKey: postData.apiKey });
+    };
+
+    request(options, callback)
+});
 
 /********************************************************/
 /* After user successfully authenticated                */
@@ -76,7 +94,7 @@ router.post('/portfolio', urlencodedParser, function(req, resp, next){
 /* Go to a trading ticket screen */
 /*********************************/
 router.post('/tradingTicket', urlencodedParser, function(req, resp, next){
-    resp.render('tradingTicket', {data: req.body});
+    resp.render('tradingTicket', {data: req.body, trade: tradeDataFromOptimizer});
 });
 
 router.post('/authError', urlencodedParser, function(req, resp, next){

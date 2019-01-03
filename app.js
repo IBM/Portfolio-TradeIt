@@ -8,6 +8,9 @@ var hbs = require('hbs');
 var app = express();
 
 hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerHelper('json', function(context) {
+  return JSON.stringify(context);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

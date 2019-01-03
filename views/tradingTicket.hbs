@@ -110,6 +110,30 @@
 <script src="/javascripts/calendar.js"></script>
 
 <script>
+
+    $(document).ready(function() {
+      fillPostDataIfExists();
+    });
+   
+    var fillOptimizedData = function(index, trade) {
+      $("#orderSymbolSet"+index).val(trade.name);
+      $("#orderQuantitySet"+index).val(trade.quantity);
+      $("select[name='orderAction"+index+"']").val(trade.action);
+    };
+    
+    var fillPostDataIfExists = function() {
+      var tradeit_trades = JSON.parse('{{{json trade}}}');
+      console.log(tradeit_trades);
+      if ("trades" in tradeit_trades) {
+        for (var i = 1; i < tradeit_trades.trades.length; i+=1) {
+          $("#addMore").click();
+        }
+        for (var i = 0; i < tradeit_trades.trades.length; i+=1) {
+          fillOptimizedData(i+1, tradeit_trades.trades[i]);
+        }
+      }
+    };
+
     $(function(){
         $('#reviewOrder').on('click', function(){
            getPreviewOrder();
