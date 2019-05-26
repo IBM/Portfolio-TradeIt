@@ -1,3 +1,7 @@
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. The repository will be kept available in read-only mode.
+
 # Place trades through your online broker via simple API calls
 
 Nobody likes losing money in the market. Investors want to be informed at all times of the current state of the market, and need to be ready to make trades at a moment’s notice. Imagine you are a financial institution that wants to provide its client base with the capability to trade stocks, exchange-traded funds, and currencies without having the need to leave their platform and manage relationships with external brokerage firms. To achieve this, you need a way to securely integrate with online brokers for your users and allow them to make trades directly and seamlessly with their connected accounts. TradeIt enables these capabilities by providing an API infrastructure that links retail investors and financial institutions with online financial brokers.
